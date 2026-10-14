@@ -1,0 +1,84 @@
+KAFE & COWORKING SPACE — KELOMPOK 6
+Blok IP: 192.168.6.0/24
+
+/system identity set name=R1-KAFE
+
+/ip address add address=192.168.6.33/29 interface=ether1 comment="LAN-KASIR"
+/ip address add address=192.168.6.1/27 interface=ether2 comment="LAN-COWORKING"
+/ip address add address=192.168.6.41/29 interface=ether3 comment="LAN-ADMIN"
+/ip address add address=192.168.6.49/29 interface=ether4 comment="LAN-SERVER"
+
+/interface list add name=ROOM-LAN
+/interface list member add list=ROOM-LAN interface=ether1
+/interface list member add list=ROOM-LAN interface=ether2
+/interface list member add list=ROOM-LAN interface=ether3
+/interface list member add list=ROOM-LAN interface=ether4
+
+/ip firewall filter add chain=forward in-interface-list=ROOM-LAN out-interface-list=ROOM-LAN action=drop comment="Blokir antar-ruangan"
+
+
+=== IP VPCS ===
+Buka console tiap VPCS dan masukkan perintah sesuai nama node.
+
+[KSR-PC01 — Bar/Kasir]
+ip 192.168.6.35/29 192.168.6.33
+
+[KSR-PC02 — Bar/Kasir]
+ip 192.168.6.36/29 192.168.6.33
+
+[COW-PC01 — Coworking]
+ip 192.168.6.3/27 192.168.6.1
+
+[COW-PC02 — Coworking]
+ip 192.168.6.4/27 192.168.6.1
+
+[COW-PC03 — Coworking]
+ip 192.168.6.5/27 192.168.6.1
+
+[COW-PC04 — Coworking]
+ip 192.168.6.6/27 192.168.6.1
+
+[COW-PC05 — Coworking]
+ip 192.168.6.7/27 192.168.6.1
+
+[COW-PC06 — Coworking]
+ip 192.168.6.8/27 192.168.6.1
+
+[COW-PC07 — Coworking]
+ip 192.168.6.9/27 192.168.6.1
+
+[COW-PC08 — Coworking]
+ip 192.168.6.10/27 192.168.6.1
+
+[COW-PC09 — Coworking]
+ip 192.168.6.11/27 192.168.6.1
+
+[COW-PC10 — Coworking]
+ip 192.168.6.12/27 192.168.6.1
+
+[COW-PC11 — Coworking]
+ip 192.168.6.13/27 192.168.6.1
+
+[COW-PC12 — Coworking]
+ip 192.168.6.14/27 192.168.6.1
+
+[ADM-PC01 — Admin/Keuangan]
+ip 192.168.6.43/29 192.168.6.41
+
+[ADM-PC02 — Admin/Keuangan]
+ip 192.168.6.44/29 192.168.6.41
+
+[SRV-PC01 — Server/Penyimpanan]
+ip 192.168.6.52/29 192.168.6.49
+
+[SRV-PC02 — Server/Penyimpanan]
+ip 192.168.6.53/29 192.168.6.49
+
+[SRV01 — opsional, VPCS simulasi server]
+ip 192.168.6.51/29 192.168.6.49
+
+=== UJI PING ===
+KSR-PC01> ping 192.168.6.36       (Reply — satu subnet kasir)
+COW-PC01> ping 192.168.6.4        (Reply — satu subnet coworking)
+COW-PC01> ping 192.168.6.35       (Timeout — ACL blok ke subnet kasir)
+KSR-PC01> ping 192.168.6.43       (Timeout — ACL blok ke subnet admin)
